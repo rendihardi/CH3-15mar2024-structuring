@@ -4,7 +4,10 @@ const router = express.Router();
 
 const customerController = require("../controllers/customerController");
 
-router.route("/").get(getCustomers).post(createCustomer);
+router
+  .route("/")
+  .get(customerController.getCustomers)
+  .post(customerController.createCustomer);
 router
   .route("/:id")
   .get(customerController.getCustomerById)

@@ -1,22 +1,22 @@
 const fs = require("fs");
+
 // read file json nya
 const customers = JSON.parse(
   fs.readFileSync(`${__dirname}/../data/dummy.json`)
 );
 
-// Get customers
 const getCustomers = (req, res, next) => {
+  console.log(req.requestTime);
   res.status(200).json({
     status: "success",
     totalData: customers.length,
-    requestAt: req.requestime,
+    requestAt: req.requestTime,
     data: {
       customers,
     },
   });
 };
 
-// Get customers by ID
 const getCustomerById = (req, res, next) => {
   const id = req.params.id;
 
@@ -31,13 +31,17 @@ const getCustomerById = (req, res, next) => {
   });
 };
 
-// Update customer
 const updateCustomer = (req, res) => {
+  console.log("MASUK EDIT GAK");
   const id = req.params.id;
 
   // 1. melakukan pencarian data yg sesuai parameter id nya
   const customer = customers.find((cust) => cust._id === id);
   const customerIndex = customers.findIndex((cust) => cust._id === id);
+
+  console.log(customer);
+  console.log(customerIndex);
+  console.log(!customer);
 
   // 2. ada gak data customer nya
   if (!customer) {
@@ -66,7 +70,6 @@ const updateCustomer = (req, res) => {
   );
 };
 
-// Deletete Customer
 const deleteCustomer = (req, res) => {
   const id = req.params.id;
 
@@ -98,10 +101,11 @@ const deleteCustomer = (req, res) => {
   );
 };
 
-// Create a new customer
 const createCustomer = (req, res) => {
   console.log(req.body);
+
   const newCustomer = req.body;
+
   customers.push(newCustomer);
 
   fs.writeFile(
@@ -121,7 +125,7 @@ const createCustomer = (req, res) => {
 module.exports = {
   getCustomers,
   getCustomerById,
+  createCustomer,
   updateCustomer,
   deleteCustomer,
-  createCustomer,
 };
